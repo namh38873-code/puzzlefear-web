@@ -1,19 +1,220 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#170d29"><title>PuzzleFear — Halloween Puzzle</title><style>
-:root{font-family:system-ui,-apple-system,sans-serif;color:#fff3d7;background:#130b22}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 18%,#54316a 0,#231337 46%,#10091d 100%);overflow-x:hidden}button{font:inherit;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid #ffd47a}main{width:min(100%,520px);min-height:100dvh;margin:auto;position:relative;padding:22px 18px 32px;display:flex;flex-direction:column;align-items:center;overflow:hidden}.sky{position:absolute;inset:0;pointer-events:none;opacity:.45;background:radial-gradient(circle at 82% 10%,#f2c9f5 0 38px,transparent 39px),radial-gradient(circle at 17% 38%,#f88c4b66,transparent 130px)}.sky:after{content:"✦　✧　✦　✧　✦　✧　✦";position:absolute;top:14%;left:0;right:0;text-align:center;color:#f6d2ff;font-size:24px;letter-spacing:16px}.content{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;flex:1}.logo{font-family:Georgia,serif;font-size:clamp(52px,13vw,76px);font-weight:900;color:#ffd39a;line-height:1.05;text-align:center;text-shadow:0 5px #8c3054,0 10px 25px #ff713b66;margin:12vh 0 4px}.subtitle{color:#ffc36c;letter-spacing:4px;font-size:12px;font-weight:800;text-align:center}.ghosts{font-size:clamp(70px,20vw,112px);filter:drop-shadow(0 10px 18px #07040b);margin:30px 0 12px}.tag{color:#e8c8f3;text-align:center;font-size:15px;line-height:1.6}.btn{width:min(100%,330px);padding:15px 20px;border-radius:16px;border:2px solid #ffbd73;background:linear-gradient(180deg,#ffae4c,#d85a3b);box-shadow:0 5px 0 #793049,0 10px 28px #08030d8c;color:#2d1024;font-weight:900;font-size:20px;margin:11px 0}.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #793049}.btn.secondary{background:#342044;color:#ffe1ae;border-color:#87577b;box-shadow:0 4px 0 #160b26;font-size:16px}.top{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0 18px}.back{border:1px solid #a76880;background:#392044;color:#ffddb2;border-radius:14px;padding:9px 14px;font-size:22px}.heading{font-family:Georgia,serif;font-size:30px;color:#ffd294;text-shadow:0 3px #7a2c55;margin:0;text-align:center}.small{font-size:13px;color:#d8b9e8}.levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;padding:8px 0 20px}.level{background:#281837;border:2px solid #9c5974;border-radius:15px;padding:5px;position:relative;box-shadow:0 5px 12px #0006;min-width:0}.level.locked{filter:saturate(.35);opacity:.55}.level .thumb{width:100%;aspect-ratio:1;display:block;border-radius:9px;object-fit:cover}.level .num{display:block;color:#ffd18e;font-weight:900;margin:5px auto 2px;text-align:center}.level .lock{position:absolute;top:25%;left:0;right:0;text-align:center;font-size:26px}.puzzleWrap{width:min(100%,450px);margin:8px auto;position:relative;padding:9px;border-radius:18px;background:#140d24;border:3px solid #f1a85d;box-shadow:0 0 22px #b84d7b88}.board{display:grid;grid-template-columns:repeat(3,1fr);aspect-ratio:1;gap:4px}.tile{width:100%;height:100%;border:0;border-radius:8px;background-color:#271736;background-repeat:no-repeat;background-size:300% 300%;box-shadow:inset 0 0 0 1px #ffd6a844;transition:transform .12s}.tile:active{transform:scale(.95)}.tile.blank{background:#1c112b;box-shadow:inset 0 0 14px #05010c}.preview{width:100%;max-width:145px;aspect-ratio:1;border-radius:13px;border:3px solid #a36e9b;box-shadow:0 0 20px #0008}.info{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px;margin:9px 0}.stat{background:#2b193e;border:1px solid #835273;padding:8px 12px;border-radius:12px;color:#ffdbac;font-weight:700}.finish{background:#29173c;border:2px solid #f9ae63;border-radius:20px;padding:16px;text-align:center;width:100%;box-shadow:0 0 28px #ff8c5244}.finish img{width:min(100%,280px);border-radius:12px;border:3px solid #d58aaf}.stars{font-size:35px;color:#ffd15a;letter-spacing:5px}.footer{margin-top:auto;padding-top:22px;color:#aa8caf;font-size:12px}.hide{display:none!important}@media(max-width:360px){main{padding:15px 11px}.levels{gap:8px}.heading{font-size:25px}.tile{border-radius:4px}}
-</style></head><body><main><div class="sky"></div><div id="app" class="content"></div></main><script>
-'use strict';
-const names=['Bí ngô ma thuật','Mèo đen tinh nghịch','Bóng ma dễ thương','Phù thủy nhỏ','Nhện giăng tơ','Lâu đài ma ám','Vạc phép thuật','Dơi đêm trăng','Cú mèo bí ẩn','Kẹo Halloween','Bộ xương vui vẻ','Xác ướp tí hon','Quái vật Frankenstein','Ma cà rồng nhí','Ngôi nhà bí ngô','Nấm phép thuật','Bù nhìn Halloween','Rồng bí ngô','Cây cổ thụ ma','Đêm hội Halloween'];
-const icons=['🎃','🐈‍⬛','👻','🧙','🕷️','🏰','🧪','🦇','🦉','🍬','💀','🧟','🧌','🧛','🏚️','🍄','🌾','🐉','🌳','🎆'];
-const palettes=[['#4d236e','#f9913d'],['#162b58','#a04cb0'],['#26356c','#9ac6ff'],['#48245e','#d967a4'],['#25324f','#79bdba'],['#351c5b','#ee7750'],['#1e4b50','#9bdb8a'],['#202b60','#df89ce'],['#3a3168','#caa878'],['#6d265b','#ffad71']];
-const app=document.getElementById('app');const key='puzzlefear_web_v28_unlock';let unlocked=Math.max(1,Math.min(20,Number(localStorage.getItem(key))||1));let stage=0,board=[],moves=0,seconds=0,timer=null,won=false;
-function art(i){const [a,b]=palettes[i%10],emoji=icons[i];let ornaments='';for(let k=0;k<27;k++){const x=(k*127+39)%600,y=(k*83+47)%600,r=5+(k*7)%19;ornaments+='<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+(k%2?'#fff2be':'#e6a8ff')+'" opacity="'+(k%4===0?.46:.18)+'"/>'}let corners='';for(let k=0;k<4;k++){let x=k%2?510:90,y=k>1?510:90;corners+='<g transform="translate('+x+' '+y+')"><circle r="53" fill="'+b+'" opacity=".24"/><text text-anchor="middle" dominant-baseline="central" font-size="65">'+icons[(i+k+4)%20]+'</text></g>'}let svg='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><defs><radialGradient id="g"><stop stop-color="'+b+'"/><stop offset="1" stop-color="'+a+'"/></radialGradient><pattern id="p" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M0 40L40 0" stroke="#fff" opacity=".06"/></pattern></defs><rect width="600" height="600" fill="url(#g)"/><rect width="600" height="600" fill="url(#p)"/>'+ornaments+'<circle cx="300" cy="285" r="188" fill="#120e2c" opacity=".42"/>'+corners+'<text x="300" y="350" text-anchor="middle" font-size="245">'+emoji+'</text><path d="M20 455Q300 405 580 455L580 585L20 585Z" fill="#1b1132" opacity=".8"/><text x="300" y="520" text-anchor="middle" fill="#ffe3b0" font-family="sans-serif" font-weight="bold" font-size="29">PUZZLEFEAR</text><text x="300" y="563" text-anchor="middle" fill="#e7b6e7" font-family="sans-serif" font-size="19">HALLOWEEN · '+String(i+1).padStart(2,'0')+'</text></svg>';return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)}
-const arts=names.map((_,i)=>art(i));function stop(){if(timer){clearInterval(timer);timer=null}}function button(text,fn,secondary=false){let b=document.createElement('button');b.className='btn'+(secondary?' secondary':'');b.textContent=text;b.onclick=fn;return b}function head(title,back){let el=document.createElement('div');el.className='top';let b=document.createElement('button');b.className='back';b.textContent='‹';b.onclick=back;let h=document.createElement('h1');h.className='heading';h.textContent=title;let spacer=document.createElement('div');spacer.style.width='47px';el.append(b,h,spacer);return el}function clear(){stop();app.replaceChildren()}
-function menu(){clear();let logo=document.createElement('div');logo.className='logo';logo.textContent='PuzzleFear';let sub=document.createElement('div');sub.className='subtitle';sub.textContent='HALLOWEEN PUZZLE';let gh=document.createElement('div');gh.className='ghosts';gh.textContent='🎃 👻 🦇';let p=document.createElement('p');p.className='tag';p.textContent='20 bức tranh Halloween · Ghép hình 3×3 · Mở khóa từng ải';app.append(logo,sub,gh,p,button('▶ CHƠI NGAY',levels),button('Tiếp tục ải '+unlocked,()=>play(unlocked-1),true));let ft=document.createElement('div');ft.className='footer';ft.textContent='PuzzleFear Web · v28';app.append(ft)}
-function levels(){clear();app.append(head('CHỌN ẢI',menu));let info=document.createElement('p');info.className='small';info.textContent='Đã mở '+unlocked+'/20 ải · Hoàn thành ải trước để mở tiếp';app.append(info);let grid=document.createElement('div');grid.className='levels';names.forEach((n,i)=>{let b=document.createElement('button');b.className='level'+(i>=unlocked?' locked':'');b.disabled=i>=unlocked;let img=document.createElement('img');img.className='thumb';img.src=arts[i];img.alt=n;let t=document.createElement('span');t.className='num';t.textContent='Ải '+(i+1);b.append(img,t);if(i>=unlocked){let l=document.createElement('span');l.className='lock';l.textContent='🔒';b.append(l)}b.onclick=()=>play(i);grid.append(b)});app.append(grid)}
-function shuffle(){board=[0,1,2,3,4,5,6,7,8];let prev=-1;for(let k=0;k<25+stage*3;k++){let empty=board.indexOf(8),adj=[empty-3,empty+3,...(empty%3?[empty-1]:[]),...(empty%3<2?[empty+1]:[])].filter(n=>n>=0&&n<9&&n!==prev);let next=adj[Math.floor(Math.random()*adj.length)];[board[empty],board[next]]=[board[next],board[empty]];prev=empty}if(board.every((v,i)=>v===i))shuffle()}
-function play(i){clear();stage=i;moves=0;seconds=0;won=false;shuffle();app.append(head('ẢI '+(i+1),levels));let name=document.createElement('div');name.className='subtitle';name.textContent=names[i].toUpperCase();app.append(name);let info=document.createElement('div');info.className='info';let preview=document.createElement('img');preview.className='preview';preview.src=arts[i];preview.alt='Hình mẫu';let stats=document.createElement('div');stats.style.display='grid';stats.style.gap='8px';stats.innerHTML='<div class="stat" id="move">Lượt: 0</div><div class="stat" id="time">Thời gian: 00:00</div><div class="small">Chạm ô cạnh chỗ trống</div>';info.append(preview,stats);app.append(info);let wrap=document.createElement('div');wrap.className='puzzleWrap';let grid=document.createElement('div');grid.className='board';grid.id='board';wrap.append(grid);app.append(wrap);app.append(button('↻ XÁO TRỘN LẠI',()=>play(stage),true));render();timer=setInterval(()=>{seconds++;let t=document.getElementById('time');if(t)t.textContent='Thời gian: '+fmt(seconds)},1000)}
-function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}function render(){let grid=document.getElementById('board');if(!grid)return;grid.replaceChildren();board.forEach((n,pos)=>{let b=document.createElement('button');b.className='tile'+(n===8?' blank':'');b.setAttribute('aria-label',n===8?'Ô trống':'Mảnh ghép '+(n+1));if(n!==8){b.style.backgroundImage='url("'+arts[stage]+'")';b.style.backgroundPosition=(n%3)*50+'% '+Math.floor(n/3)*50+'%';b.onclick=()=>slide(pos)}grid.append(b)});let m=document.getElementById('move');if(m)m.textContent='Lượt: '+moves}
-function slide(pos){if(won)return;let empty=board.indexOf(8);if(!(Math.abs(Math.floor(pos/3)-Math.floor(empty/3))+Math.abs(pos%3-empty%3)===1))return;[board[pos],board[empty]]=[board[empty],board[pos]];moves++;render();if(board.every((v,i)=>v===i)){won=true;stop();setTimeout(finish,250)}}
-function finish(){clear();if(stage+2>unlocked){unlocked=Math.min(20,stage+2);localStorage.setItem(key,unlocked)}app.append(head('HOÀN THÀNH!',levels));let box=document.createElement('div');box.className='finish';let stars=document.createElement('div');stars.className='stars';stars.textContent='★ ★ ★';let image=document.createElement('img');image.src=arts[stage];image.alt=names[stage];let p=document.createElement('p');p.textContent='Ải '+(stage+1)+' · '+moves+' lượt · '+fmt(seconds);box.append(stars,image,p);app.append(box);if(stage<19)app.append(button('▶ ẢI TIẾP THEO',()=>play(stage+1)));app.append(button('CHỌN ẢI',levels,true))}
-menu();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+		<title>PuzzleFear</title>
+		<style>
+html, body, #canvas {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+body {
+	color: white;
+	background-color: black;
+	overflow: hidden;
+	touch-action: none;
+}
+
+#canvas {
+	display: block;
+}
+
+#canvas:focus {
+	outline: none;
+}
+
+#status, #status-splash, #status-progress {
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+#status, #status-splash {
+	top: 0;
+	bottom: 0;
+}
+
+#status {
+	background-color: #242424;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	visibility: hidden;
+}
+
+#status-splash {
+	max-height: 100%;
+	max-width: 100%;
+	margin: auto;
+}
+
+#status-splash.show-image--false {
+	display: none;
+}
+
+#status-splash.fullsize--true {
+	height: 100%;
+	width: 100%;
+	object-fit: contain;
+}
+
+#status-splash.use-filter--false {
+	image-rendering: pixelated;
+}
+
+#status-progress, #status-notice {
+	display: none;
+}
+
+#status-progress {
+	bottom: 10%;
+	width: 50%;
+	margin: 0 auto;
+}
+
+#status-notice {
+	background-color: #5b3943;
+	border-radius: 0.5rem;
+	border: 1px solid #9b3943;
+	color: #e0e0e0;
+	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
+	line-height: 1.3;
+	margin: 0 2rem;
+	overflow: hidden;
+	padding: 1rem;
+	text-align: center;
+	z-index: 1;
+}
+		</style>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
+
+	</head>
+	<body>
+		<canvas id="canvas">
+			Your browser does not support the canvas tag.
+		</canvas>
+
+		<noscript>
+			Your browser does not support JavaScript.
+		</noscript>
+
+		<div id="status">
+			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="">
+			<progress id="status-progress"></progress>
+			<div id="status-notice"></div>
+		</div>
+
+		<script src="index.js"></script>
+		<script>
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":39762076,"index.wasm":39509339},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_THREADS_ENABLED = false;
+const engine = new Engine(GODOT_CONFIG);
+
+(function () {
+	const statusOverlay = document.getElementById('status');
+	const statusProgress = document.getElementById('status-progress');
+	const statusNotice = document.getElementById('status-notice');
+
+	let initializing = true;
+	let statusMode = '';
+
+	function setStatusMode(mode) {
+		if (statusMode === mode || !initializing) {
+			return;
+		}
+		if (mode === 'hidden') {
+			statusOverlay.remove();
+			initializing = false;
+			return;
+		}
+		statusOverlay.style.visibility = 'visible';
+		statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
+		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
+		statusMode = mode;
+	}
+
+	function setStatusNotice(text) {
+		while (statusNotice.lastChild) {
+			statusNotice.removeChild(statusNotice.lastChild);
+		}
+		const lines = text.split('\n');
+		lines.forEach((line) => {
+			statusNotice.appendChild(document.createTextNode(line));
+			statusNotice.appendChild(document.createElement('br'));
+		});
+	}
+
+	function displayFailureNotice(err) {
+		console.error(err);
+		if (err instanceof Error) {
+			setStatusNotice(err.message);
+		} else if (typeof err === 'string') {
+			setStatusNotice(err);
+		} else {
+			setStatusNotice('An unknown error occurred.');
+		}
+		setStatusMode('notice');
+		initializing = false;
+	}
+
+	const missing = Engine.getMissingFeatures({
+		threads: GODOT_THREADS_ENABLED,
+	});
+
+	if (missing.length !== 0) {
+		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
+			let serviceWorkerRegistrationPromise;
+			try {
+				serviceWorkerRegistrationPromise = navigator.serviceWorker.getRegistration();
+			} catch (err) {
+				serviceWorkerRegistrationPromise = Promise.reject(new Error('Service worker registration failed.'));
+			}
+			// There's a chance that installing the service worker would fix the issue
+			Promise.race([
+				serviceWorkerRegistrationPromise.then((registration) => {
+					if (registration != null) {
+						return Promise.reject(new Error('Service worker already exists.'));
+					}
+					return registration;
+				}).then(() => engine.installServiceWorker()),
+				// For some reason, `getRegistration()` can stall
+				new Promise((resolve) => {
+					setTimeout(() => resolve(), 2000);
+				}),
+			]).then(() => {
+				// Reload if there was no error.
+				window.location.reload();
+			}).catch((err) => {
+				console.error('Error while registering service worker:', err);
+			});
+		} else {
+			// Display the message as usual
+			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
+			displayFailureNotice(missingMsg + missing.join('\n'));
+		}
+	} else {
+		setStatusMode('progress');
+		engine.startGame({
+			'onProgress': function (current, total) {
+				if (current > 0 && total > 0) {
+					statusProgress.value = current;
+					statusProgress.max = total;
+				} else {
+					statusProgress.removeAttribute('value');
+					statusProgress.removeAttribute('max');
+				}
+			},
+		}).then(() => {
+			setStatusMode('hidden');
+		}, displayFailureNotice);
+	}
+}());
+		</script>
+	</body>
+</html>
+
