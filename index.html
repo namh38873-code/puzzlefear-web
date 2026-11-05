@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
@@ -13,7 +13,7 @@ html, body, #canvas {
 
 body {
 	color: white;
-	background-color: black;
+	background-color: #160c27;
 	overflow: hidden;
 	touch-action: none;
 }
@@ -38,7 +38,7 @@ body {
 }
 
 #status {
-	background-color: #242424;
+	background: radial-gradient(circle at center, #4a255b, #160c27 75%);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -89,22 +89,28 @@ body {
 	text-align: center;
 	z-index: 1;
 }
-		</style>
+		
+#loading-brand {display:flex;flex-direction:column;align-items:center;gap:12px;color:#ffb968;font:700 clamp(32px,8vw,52px) system-ui,sans-serif;text-shadow:0 3px 24px #ed793f77}
+#loading-brand small {font:600 12px system-ui,sans-serif;letter-spacing:3px;color:#dec6ed}
+#loading-message {position:absolute;bottom:20%;left:0;right:0;text-align:center;color:#dec6ed;font:500 14px system-ui,sans-serif}
+#status-progress {accent-color:#ffa23f;bottom:13%;width:min(65%,320px);height:12px}
+#canvas {width:100vw;height:100dvh}
+</style>
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
 
 	</head>
 	<body>
 		<canvas id="canvas">
-			Your browser does not support the canvas tag.
+			Trình duyệt không hỗ trợ canvas.
 		</canvas>
 
 		<noscript>
-			Your browser does not support JavaScript.
+			Vui lòng bật JavaScript để chơi PuzzleFear.
 		</noscript>
 
 		<div id="status">
-			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="">
+			<div id="loading-brand">🎃<strong>PuzzleFear</strong><small>HALLOWEEN PUZZLE</small></div><div id="loading-message">Đang tải trò chơi…</div>
 			<progress id="status-progress"></progress>
 			<div id="status-notice"></div>
 		</div>
@@ -204,6 +210,7 @@ const engine = new Engine(GODOT_CONFIG);
 				if (current > 0 && total > 0) {
 					statusProgress.value = current;
 					statusProgress.max = total;
+                    document.getElementById('loading-message').textContent = 'Đang tải trò chơi… ' + Math.round(current / total * 100) + '%';
 				} else {
 					statusProgress.removeAttribute('value');
 					statusProgress.removeAttribute('max');
