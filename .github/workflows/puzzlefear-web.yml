@@ -1,0 +1,79 @@
+name: Build and deploy PuzzleFear Web
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: puzzlefear-pages
+  cancel-in-progress: true
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect Godot source
+        id: source
+        shell: bash
+        run: |
+          if [ -f godot-source/project.godot ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Godot 4.7
+        if: steps.source.outputs.available == 'true'
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: true
+
+      - name: Import assets
+        if: steps.source.outputs.available == 'true'
+        run: godot --headless --path godot-source --editor --import --quit
+
+      - name: Export HTML5
+        if: steps.source.outputs.available == 'true'
+        run: |
+          mkdir -p web-build
+          godot --headless --path godot-source --export-release "Web" "$GITHUB_WORKSPACE/web-build/index.html"
+
+      - name: Use existing Web export until source is committed
+        if: steps.source.outputs.available != 'true'
+        run: |
+          mkdir -p web-build
+          cp index.html index.js index.pck index.wasm web-build/
+          for file in index.*.js index.*.png index.*.svg index.*.ico _headers; do
+            if [ -f "$file" ]; then cp "$file" web-build/; fi
+          done
+
+      - name: Copy optional Web hosting headers
+        if: steps.source.outputs.available == 'true'
+        run: |
+          if [ -f _headers ]; then cp _headers web-build/; fi
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web-build
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
